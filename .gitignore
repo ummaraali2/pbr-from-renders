@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.env
+results/checkpoints/
+results/progress/
+data/targets/*.exr
+*.pt
+*.npy
+uv.lock
