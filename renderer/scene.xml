@@ -1,0 +1,46 @@
+<scene version="3.0.0">
+
+  <!-- Rendering algorithm: path tracer with max 6 bounces -->
+  <integrator type="path">
+    <integer name="max_depth" value="6"/>
+  </integrator>
+
+  <!-- Camera -->
+  <sensor type="perspective" id="sensor">
+    <float name="fov" value="45"/>
+    <transform name="to_world">
+      <lookat origin="0, 0.3, 2" target="0, 0.1, 0" up="0, 1, 0"/>
+    </transform>
+    <film type="hdrfilm">
+      <integer name="width" value="256"/>
+      <integer name="height" value="256"/>
+      <rfilter type="tent"/>
+    </film>
+    <sampler type="independent">
+      <integer name="sample_count" value="16"/>
+    </sampler>
+  </sensor>
+
+  <!-- Environment lighting -->
+  <emitter type="envmap" id="envmap">
+    <string name="filename" value="assets/envmap_train.exr"/>
+    <float name="scale" value="1.0"/>
+  </emitter>
+
+  <!-- Spot mesh -->
+  <shape type="obj" id="object">
+    <string name="filename" value="assets/mesh.obj"/>
+    <bsdf type="principled" id="object_material">
+      <rgb name="base_color" value="0.7, 0.2, 0.1"/>
+      <float name="metallic" value="0.05"/>
+      <float name="roughness" value="0.45"/>
+      <float name="spec_tint" value="0.0"/>
+      <float name="anisotropic" value="0.0"/>
+      <float name="sheen" value="0.0"/>
+      <float name="sheen_tint" value="0.0"/>
+      <float name="clearcoat" value="0.0"/>
+      <float name="clearcoat_gloss" value="0.0"/>
+    </bsdf>
+  </shape>
+
+</scene>
