@@ -38,10 +38,12 @@ def tonemap(x):
 
 
 def load_targets():
+    import mitsuba as mi
+    mi.set_variant("llvm_ad_rgb")
     views = []
     for i in range(6):
-        img = np.asarray(imageio.imread(DATA / "targets" / f"view_{i:02d}.exr"),
-                         dtype=np.float32)
+        bitmap = mi.Bitmap(str(DATA / "targets" / f"view_{i:02d}.exr"))
+        img = np.array(bitmap, dtype=np.float32)
         views.append(tonemap(img))
     return torch.from_numpy(np.stack(views))          # [6,H,W,3]
 
