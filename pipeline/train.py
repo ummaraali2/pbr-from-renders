@@ -161,7 +161,7 @@ def main():
                 print("and re-run pipeline/gradient_check.py.")
                 return
 
-            if not args.smoke and it % 200 == 0:
+            if not args.smoke and it % 199 == 0:
                 torch.save({"iter": it, "model": net.state_dict(),
                             "opt": opt.state_dict()},
                            RESULTS / "checkpoints" / f"ckpt_{it:04d}.pt")
