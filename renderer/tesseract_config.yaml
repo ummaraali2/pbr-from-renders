@@ -4,6 +4,10 @@ description: "Differentiable Monte Carlo path tracer (Mitsuba 3 / Dr.Jit) exposi
 
 build_config:
   base_image: "python:3.11-slim"
+  # LLVM required for Dr.Jit's llvm_ad_rgb backend
+  extra_packages:
+    - llvm-14
+    - libllvm14
   # scene.xml + assets must be inside the image; the container has no host mount.
   package_data:
     - ["scene.xml", "scene.xml"]
