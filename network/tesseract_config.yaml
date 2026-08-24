@@ -1,0 +1,8 @@
+name: "pbr-network"
+version: "0.1.0"
+description: "U-Net predicting PBR material maps from six views. Differentiates via torch autograd; composes with the Dr.Jit renderer Tesseract."
+
+build_config:
+  base_image: "python:3.11-slim"
+  package_data:
+    - ["model.py", "model.py"]

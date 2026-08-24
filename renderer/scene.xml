@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<scene version="3.5.0">
+
+    <!-- Path Replay Backpropagation.
+         Docs: recommended when nothing moves (no geometry/camera optimization).
+         Naive AD through `path` runs out of memory at nontrivial spp. -->
+    <integrator type="prb">
+        <integer name="max_depth" value="6"/>
+    </integrator>
+
+    <default name="res" value="128"/>
+    <default name="spp" value="16"/>
+
+    <!-- === Object === -->
+    <!-- NOT wrapped in <bsdf type="twosided">.  If you add twosided, every
+         param key gains a `brdf_0.` segment.  Run pipeline/dump_params.py
+         after any scene edit and trust that output over these comments. -->
+    <shape type="obj" id="object">
+        <string name="filename" value="assets/mesh.obj"/>
+
+        <bsdf type="principled">
+            <texture type="bitmap" name="base_color">
+                <string name="filename" value="assets/init_basecolor.png"/>
+                <!-- sRGB decode is CORRECT for color data -->
+            </texture>
+
+            <texture type="bitmap" name="roughness">
+                <string name="filename" value="assets/init_roughness.png"/>
+                <boolean name="raw" value="true"/>
+                <!-- raw=true: linear data, NOT color.  Omitting this silently
+                     gamma-shifts your ground truth. -->
+            </texture>
+
+            <texture type="bitmap" name="metallic">
+                <string name="filename" value="assets/init_metallic.png"/>
+                <boolean name="raw" value="true"/>
+            </texture>
+
+            <float name="specular" value="0.5"/>
+        </bsdf>
+    </shape>
+
+    <!-- === Lighting === -->
+    <emitter type="envmap" id="envmap">
+        <string name="filename" value="assets/envmap_train.exr"/>
+        <float name="scale" value="1.0"/>
+    </emitter>
+
+    <!-- === Cameras ===
+         Six views on a ring at 60 deg spacing, radius 3, slight elevation.
+         Named sensor_0 .. sensor_5; loaded as a list by index in the API. -->
+
+    <sensor type="perspective" id="sensor_0">
+        <float name="fov" value="40"/>
+        <transform name="to_world">
+            <lookat origin="3.00, 0.80, 0.00" target="0, 0, 0" up="0, 1, 0"/>
+        </transform>
+        <sampler type="independent"><integer name="sample_count" value="$spp"/></sampler>
+        <film type="hdrfilm">
+            <integer name="width" value="$res"/>
+            <integer name="height" value="$res"/>
+            <rfilter type="box"/>
+        </film>
+    </sensor>
+
+    <sensor type="perspective" id="sensor_1">
+        <float name="fov" value="40"/>
+        <transform name="to_world">
+            <lookat origin="1.50, 0.80, 2.60" target="0, 0, 0" up="0, 1, 0"/>
+        </transform>
+        <sampler type="independent"><integer name="sample_count" value="$spp"/></sampler>
+        <film type="hdrfilm">
+            <integer name="width" value="$res"/>
+            <integer name="height" value="$res"/>
+            <rfilter type="box"/>
+        </film>
+    </sensor>
+
+    <sensor type="perspective" id="sensor_2">
+        <float name="fov" value="40"/>
+        <transform name="to_world">
+            <lookat origin="-1.50, 0.80, 2.60" target="0, 0, 0" up="0, 1, 0"/>
+        </transform>
+        <sampler type="independent"><integer name="sample_count" value="$spp"/></sampler>
+        <film type="hdrfilm">
+            <integer name="width" value="$res"/>
+            <integer name="height" value="$res"/>
+            <rfilter type="box"/>
+        </film>
+    </sensor>
+
+    <sensor type="perspective" id="sensor_3">
+        <float name="fov" value="40"/>
+        <transform name="to_world">
+            <lookat origin="-3.00, 0.80, 0.00" target="0, 0, 0" up="0, 1, 0"/>
+        </transform>
+        <sampler type="independent"><integer name="sample_count" value="$spp"/></sampler>
+        <film type="hdrfilm">
+            <integer name="width" value="$res"/>
+            <integer name="height" value="$res"/>
+            <rfilter type="box"/>
+        </film>
+    </sensor>
+
+    <sensor type="perspective" id="sensor_4">
+        <float name="fov" value="40"/>
+        <transform name="to_world">
+            <lookat origin="-1.50, 0.80, -2.60" target="0, 0, 0" up="0, 1, 0"/>
+        </transform>
+        <sampler type="independent"><integer name="sample_count" value="$spp"/></sampler>
+        <film type="hdrfilm">
+            <integer name="width" value="$res"/>
+            <integer name="height" value="$res"/>
+            <rfilter type="box"/>
+        </film>
+    </sensor>
+
+    <sensor type="perspective" id="sensor_5">
+        <float name="fov" value="40"/>
+        <transform name="to_world">
+            <lookat origin="1.50, 0.80, -2.60" target="0, 0, 0" up="0, 1, 0"/>
+        </transform>
+        <sampler type="independent"><integer name="sample_count" value="$spp"/></sampler>
+        <film type="hdrfilm">
+            <integer name="width" value="$res"/>
+            <integer name="height" value="$res"/>
+            <rfilter type="box"/>
+        </film>
+    </sensor>
+
+</scene>

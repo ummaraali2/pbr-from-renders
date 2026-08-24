@@ -1,0 +1,10 @@
+name: "pbr-renderer"
+version: "0.1.0"
+description: "Differentiable Monte Carlo path tracer (Mitsuba 3 / Dr.Jit) exposing a VJP over PBR material maps."
+
+build_config:
+  base_image: "python:3.11-slim"
+  # scene.xml + assets must be inside the image; the container has no host mount.
+  package_data:
+    - ["scene.xml", "scene.xml"]
+    - ["assets", "assets"]
