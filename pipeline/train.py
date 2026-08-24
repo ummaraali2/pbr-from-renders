@@ -16,7 +16,6 @@ import argparse
 import json
 from pathlib import Path
 
-import imageio.v2 as imageio
 import numpy as np
 import torch
 from tesseract_core import Tesseract
