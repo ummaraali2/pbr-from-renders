@@ -119,8 +119,8 @@ def vector_jacobian_product(
     return result
 
 
-def abstract_eval(inputs):
-    _, h, w, _ = inputs.views.shape
+def abstract_eval(abstract_inputs):
+    _, h, w, _ = abstract_inputs.views.shape
     return {
         "basecolor": {"shape": (h, w, 3), "dtype": "float32"},
         "roughness": {"shape": (h, w, 1), "dtype": "float32"},

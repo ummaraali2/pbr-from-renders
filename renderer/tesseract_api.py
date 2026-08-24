@@ -151,7 +151,7 @@ def vector_jacobian_product(
 # --------------------------------------------------------------------------
 # abstract_eval
 # --------------------------------------------------------------------------
-def abstract_eval(inputs):
+def abstract_eval(abstract_inputs):
     """Shape inference without running the renderer."""
-    h, w, _ = inputs.basecolor.shape
+    h, w, _ = abstract_inputs.basecolor.shape
     return {"image": {"shape": (h, w, 3), "dtype": "float32"}}
