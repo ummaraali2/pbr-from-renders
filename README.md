@@ -9,19 +9,21 @@ no ground-truth material labels anywhere.
 ## Architecture
 
     six target views
-        └─> PBRNet (plain torch nn.Module, in-process)
+        └─> [Tesseract A: PBRNet U-Net, PyTorch autograd]
                 └─> basecolor / roughness / metallic maps
-                        └─> [Tesseract: Mitsuba 3 prb path tracer, container]
+                        └─> [Tesseract B: Mitsuba 3 PRB path tracer, Dr.Jit]
                                 └─> rendered image
                                         └─> L1 + 0.1 * LPIPS vs target
                                                 └─> loss.backward()
 
-One `loss.backward()` crosses two independent autodiff systems: Dr.Jit inside
-the renderer container, torch autograd in the network. Neither can express the
-other; the VJP protocol is the interface between them.
+**Two composed Tesseracts with end-to-end gradients:**
+- **Tesseract A (network/)**: PyTorch U-Net predicting material maps
+- **Tesseract B (renderer/)**: Mitsuba 3 differentiable renderer using Dr.Jit
 
-Only the renderer is containerized. The network stays in-process, following
-the pattern in Tesseract's learned-closure demo.
+One `loss.backward()` crosses two independent autodiff systems and two
+containers. The boundary is differentiation strategy: PyTorch autograd cannot
+express Dr.Jit's path-replay backpropagation, and vice versa. The Tesseract
+VJP protocol bridges them, enabling independent evolution of each component.
 
 ## Layout
 

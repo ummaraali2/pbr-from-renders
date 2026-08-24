@@ -67,10 +67,10 @@ class OutputSchema(BaseModel):
 def _set_textures(params, basecolor, roughness, metallic):
     """Write incoming maps into the scene's bitmap texture buffers.
 
-    Mitsuba stores bitmap texture data flat: (H*W, C). The scene.xml loads
-    placeholder PNGs purely to establish those buffers; we overwrite them here.
-    Resolution of the incoming arrays MUST match the placeholders, or update()
-    will complain about a shape change.
+    We pass (H, W, C) arrays directly; Mitsuba's TensorXf handles conversion.
+    Scene.xml loads placeholder PNGs to establish buffers. Resolution MUST
+    match placeholders or update() will error.
+    TODO: Verify actual shape with dump_params.py before first run.
     """
     params[KEY_BASECOLOR] = mi.TensorXf(np.ascontiguousarray(basecolor, dtype=np.float32))
     params[KEY_ROUGHNESS] = mi.TensorXf(np.ascontiguousarray(roughness, dtype=np.float32))
@@ -81,7 +81,7 @@ def _set_textures(params, basecolor, roughness, metallic):
 def _render(params, camera_index, spp, seed):
     scene, _ = _scene()
     sensor = scene.sensors()[camera_index]
-    return mi.render(scene, params, sensor=sensor, spp=spp, seed=seed)
+    return mi.render(scene, params, sensor=sensor, spp=spp, seed=seed, seed_grad=seed + 1)
 
 
 # --------------------------------------------------------------------------

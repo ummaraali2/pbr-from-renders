@@ -31,6 +31,18 @@ for k in params.keys():
             shape = f"<{exc}>"
         print(f"  {k:<55s} {shape}")
 
+# Print shapes for the three keys we care about
+print("\n--- SHAPE VERIFICATION (needed for TensorXf fix) ---")
+KEY_BASECOLOR = "object.bsdf.base_color.data"
+KEY_ROUGHNESS = "object.bsdf.roughness.data"
+KEY_METALLIC = "object.bsdf.metallic.data"
+
+for key in [KEY_BASECOLOR, KEY_ROUGHNESS, KEY_METALLIC]:
+    if key in params:
+        print(f"{key}: shape = {params[key].shape}")
+    else:
+        print(f"{key}: NOT FOUND")
+
 print("\n--- all keys ---")
 for k in params.keys():
     print(f"  {k}")
