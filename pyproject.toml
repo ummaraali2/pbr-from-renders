@@ -4,7 +4,7 @@ version = "0.1.0"
 requires-python = ">=3.11,<3.12"
 
 dependencies = [
-  "tesseract-core==1.11.0",
+  "tesseract-core[runtime]==1.11.0",
   "tesseract-torch==0.1.0",
   "mitsuba==3.5.2",
   "drjit==0.4.6",
